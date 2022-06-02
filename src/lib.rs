@@ -1,45 +1,12 @@
-use luminance_derive::{Semantics, Vertex};
-
-
-pub const VS_STR: &str = include_str!("vs.glsl");
-pub const FS_STR: &str = include_str!("fs.glsl");
-
-// pub const VERTICES: [Vertex; 3] = [
-//   Vertex::new(
-//     VertexPosition::new([-0.5, -0.5]),
-//     VertexRGB::new([255, 0, 0]),
-//   ),
-//   Vertex::new(
-//     VertexPosition::new([0.5, -0.5]),
-//     VertexRGB::new([0, 255, 0]),
-//   ),
-//   Vertex::new(
-//     VertexPosition::new([0., 0.5]),
-//     VertexRGB::new([0, 0, 255])
-//   ),
-// ];
-
-
-#[derive(Copy, Clone, Debug, Semantics)]
-pub enum VertexSemantics {
-    #[sem(name = "position", repr = "[f32; 2]", wrapper = "VertexPosition")]
-    Position,
-    #[sem(name = "color", repr = "[u8; 3]", wrapper = "VertexRGB")]
-    Color,
-}
-
-#[derive(Clone, Copy, Debug, Vertex)]
-#[vertex(sem = "VertexSemantics")]
-pub struct Vertex {
-    #[allow(dead_code)]
-    position: VertexPosition,
-
-    #[allow(dead_code)]
-    #[vertex(normalized = "true")]
-    color: VertexRGB,
-}
-
 use std::ops::*;
+use glium::*;
+
+#[derive(Copy, Clone)]
+pub struct Vertex {
+    pub position: [f32; 2],
+}
+
+implement_vertex!(Vertex, position);
 
 #[derive(Clone, Copy)]
 pub struct CompNum {
@@ -92,10 +59,9 @@ impl CompNum {
     
     pub fn mandel(self) -> bool{
         let mut j = CompNum {real: 0., imag: 0.};
-        for i in 1..200 {
+        for _i in 1..50 {
             j = (j * j) + self;
-            if j.abs() > 2. {break;}
         }
-        if j.abs() > 2. {false} else {true}
+        j.abs() < 2.
     }
 }
