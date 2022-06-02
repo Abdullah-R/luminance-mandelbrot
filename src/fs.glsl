@@ -3,16 +3,19 @@ in vec4 pos;
 // Color output
 varying out vec4 color;
 
+// Complex Numbers type
 struct complexNum {
   float real;
   float imag;
 };
 
+// Function to check if complex number is out of bounds
 bool outOfBound(complexNum vert) {
   float sqr = (vert.real * vert.real) + (vert.imag * vert.imag);
   return (sqr > 4.0);
 }
 
+// function to multiply two complex numbers
 complexNum compMul(complexNum first, complexNum sec) {
   complexNum ret = complexNum(0.0,0.0);
 
@@ -22,10 +25,12 @@ complexNum compMul(complexNum first, complexNum sec) {
   return ret;
 }
 
+// function to add two complex numbers
 complexNum compAdd(complexNum first, complexNum sec){
   return complexNum(first.real + sec.real, first.imag + sec.imag);
 }
 
+// function to check if a complex number is in the Mandelbrot set
 int mandel(complexNum position) {
   complexNum comp1 = complexNum(0.0, 0.0);
   complexNum comp2 = complexNum(0.0, 0.0);

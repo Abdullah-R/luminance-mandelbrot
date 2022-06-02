@@ -1,30 +1,34 @@
 use mandelbrot::*;
-//use std::time::{Duration, Instant};
 use glium::{glutin::{self, dpi::PhysicalPosition}, Surface, uniform};
 use std::fs::read_to_string;
 
 fn main() {
 
+    //initial opengl and context setup
     let event_loop = glutin::event_loop::EventLoop::new();
     let wb = glutin::window::WindowBuilder::new();
     let cb = glutin::ContextBuilder::new();
     let display = glium::Display::new(wb, cb, &event_loop).unwrap();
 
-    let vertex1 = Vertex { position: [-1., -1.] };
-    let vertex2 = Vertex { position: [ 1.,  -1.] };
-    let vertex3 = Vertex { position: [ 1., 1.] };
-    let vertex4 = Vertex { position: [-1., 1.] };
-    let vertex5 = Vertex { position: [-1., -1.] };
+    //shape of window (we are applying the shader to the whole window)
+    let shape = vec![
+        Vertex { position: [-1., -1.] },
+        Vertex { position: [ 1.,  -1.] },
+        Vertex { position: [ 1., 1.] },
+        Vertex { position: [-1., 1.] },
+        Vertex { position: [-1., -1.] },
+    ];
 
-    let shape = vec![vertex1, vertex2, vertex3, vertex4, vertex5];
-
+    //vertices
     let vertex_buffer = glium::VertexBuffer::new(&display, &shape).unwrap();
     let indices = glium::index::NoIndices(glium::index::PrimitiveType::TriangleStrip);
 
+    //load shaders
     let filenames = [read_to_string("./src/vs.glsl").unwrap(), read_to_string("./src/fs.glsl").unwrap()];
     let vertex_shader_src = filenames[0].as_str();
     let fragment_shader_src = filenames[1].as_str();
 
+    //prepare program and state variables
     let program = glium::Program::from_source(&display, vertex_shader_src, fragment_shader_src, None).unwrap();
     let mut pressed = false;
     let mut pos = PhysicalPosition{x:0.0, y:0.0};

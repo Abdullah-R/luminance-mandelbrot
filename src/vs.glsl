@@ -14,5 +14,5 @@ vec2 transform(vec2 orig) {
 //Produce vertex positions for hardware
 void main() {
     gl_Position = vec4(position, 0.0, 1.0);
-    pos = vec4(transform(position), 0.0, 1.0);
+    pos = vec4(transform(position), 0.0, 1.0); // transform pixel posiition to complex plane position
 }
